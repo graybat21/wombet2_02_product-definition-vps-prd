@@ -1,0 +1,248 @@
+import React, { useState, useEffect } from 'react';
+import { AlertCircle, Activity, ChevronRight, Upload, ShieldAlert, CheckCircle, Search, Beaker } from 'lucide-react';
+
+const WOMBET2_Prototype = () => {
+  const [step, setStep] = useState('landing'); // landing, plp, pdp, analysis, result, redirect
+  const [email, setEmail] = useState('');
+  const [progress, setProgress] = useState(0);
+
+  // 시뮬레이션용 분석 대기 로직
+  useEffect(() => {
+    if (step === 'analysis') {
+      const interval = setInterval(() => {
+        setProgress((prev) => (prev >= 100 ? 100 : prev + 2));
+      }, 50);
+      if (progress === 100) setTimeout(() => setStep('result'), 500);
+      return () => clearInterval(interval);
+    }
+  }, [step, progress]);
+
+  // -- Components --
+
+  const Header = () => (
+    <header className="border-b border-gray-100 py-4 px-6 flex justify-between items-center bg-white sticky top-0 z-50">
+      <div className="flex items-center gap-2" onClick={() => setStep('landing')}>
+        <Beaker className="text-[#1A2B48]" size={24} />
+        <span className="font-bold text-xl tracking-tighter text-[#1A2B48]">WOMBET2</span>
+      </div>
+      <div className="text-[10px] font-mono text-gray-400 uppercase tracking-widest">Clinical Footwear Lab</div>
+    </header>
+  );
+
+  const Layout = ({ children }) => (
+    <div className="min-h-screen bg-white text-[#1A2B48] font-sans selection:bg-[#1A2B48] selection:text-white">
+      <Header />
+      <main className="max-w-md mx-auto pb-24">{children}</main>
+    </div>
+  );
+
+  // -- Screens --
+
+  if (step === 'landing') {
+    return (
+      <Layout>
+        <div className="px-6 pt-16 pb-12 bg-[#F8FAFC] border-b border-gray-100">
+          <div className="inline-block px-2 py-1 border border-[#1A2B48] text-[10px] font-bold mb-4">PHASE 0: VALIDATION</div>
+          <h1 className="text-4xl font-extrabold leading-tight mb-4 tracking-tight">
+            PREVENT INJURIES THROUGH <span className="text-[#D32F2F]">ANATOMICAL DATA.</span>
+          </h1>
+          <p className="text-gray-500 mb-8 leading-relaxed">
+            Stop guessing your size. Use our clinical Match DNA system to find footwear that protects your musculoskeletal health.
+          </p>
+          <div className="space-y-3">
+            <input 
+              type="email" 
+              placeholder="Enter Email for Clinical Access" 
+              className="w-full border-b-2 border-[#1A2B48] py-3 outline-none bg-transparent"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <button 
+              onClick={() => setStep('plp')}
+              className="w-full bg-[#1A2B48] text-white py-4 font-bold tracking-widest text-sm hover:bg-opacity-90 transition-all"
+            >
+              GET ACCESS
+            </button>
+          </div>
+        </div>
+      </Layout>
+    );
+  }
+
+  if (step === 'plp') {
+    return (
+      <Layout>
+        <div className="p-6">
+          <div className="flex justify-between items-end mb-8">
+            <div>
+              <h2 className="text-xs font-mono text-gray-400">CATEGORY: WEIGHTLIFTING</h2>
+              <h3 className="text-2xl font-bold">Recommended Gear</h3>
+            </div>
+            <Search size={20} />
+          </div>
+          
+          <div className="grid grid-cols-1 gap-8">
+            {[1, 2].map((i) => (
+              <div key={i} className="group cursor-pointer" onClick={() => setStep('pdp')}>
+                <div className="aspect-square bg-[#F0F2F5] relative mb-4 overflow-hidden border border-gray-100">
+                   <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'linear-gradient(#1A2B48 1px, transparent 1px), linear-gradient(90deg, #1A2B48 1px, transparent 1px)', backgroundSize: '20px 20px' }}></div>
+                   <img src={`https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&q=80&w=400`} alt="Shoe" className="p-12 mix-blend-multiply" />
+                </div>
+                <div className="flex justify-between items-start">
+                  <div>
+                    <div className="text-[10px] font-bold text-gray-400 uppercase">NIKE METCON 9</div>
+                    <div className="font-bold uppercase tracking-tight">Anatomical Training Shoe</div>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-[10px] font-bold text-[#D32F2F]">RISK INDEX: 12%</div>
+                    <div className="font-mono text-sm">$150.00</div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </Layout>
+    );
+  }
+
+  if (step === 'pdp') {
+    return (
+      <Layout>
+        {/* F1: Negative Filter Warning */}
+        <div className="bg-[#D32F2F]/5 border-y border-[#D32F2F] p-5 mb-6">
+          <div className="flex items-center gap-2 mb-3 text-[#D32F2F]">
+            <ShieldAlert size={18} />
+            <span className="font-bold text-xs tracking-widest uppercase">Clinical Contraindications</span>
+          </div>
+          <ul className="text-xs space-y-2 text-[#D32F2F]/80 font-medium">
+            <li className="flex gap-2"><span>•</span> <span>Narrow Toe Box: High risk of bunion aggravation.</span></li>
+            <li className="flex gap-2"><span>•</span> <span>Heel Slip: Reported in 15% of clinical trials for narrow heels.</span></li>
+            <li className="flex gap-2"><span>•</span> <span>Over-Stiffness: May cause plantar fascia strain.</span></li>
+          </ul>
+        </div>
+
+        <div className="px-6">
+          <div className="aspect-square bg-white border border-gray-100 relative mb-6">
+            <div className="absolute inset-0 opacity-5" style={{ backgroundImage: 'linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)', backgroundSize: '40px 40px' }}></div>
+            <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&q=80&w=400" alt="Nike Metcon" className="w-full h-full object-contain p-8" />
+          </div>
+
+          <h2 className="text-3xl font-black italic tracking-tighter uppercase mb-2">Nike Metcon 9</h2>
+          <div className="flex gap-4 font-mono text-[11px] mb-8 text-gray-400">
+            <span>DROP: 4MM</span>
+            <span>WEIGHT: 340G</span>
+            <span>CUSHION: FIRM</span>
+          </div>
+
+          <div className="p-6 border-2 border-[#1A2B48] rounded-none mb-12">
+            <h4 className="font-bold text-sm mb-2 flex items-center gap-2">
+              <Activity size={16} /> MATCH DNA ANALYSIS
+            </h4>
+            <p className="text-xs text-gray-500 mb-4 leading-relaxed">
+              Upload your anatomical data for a precise pressure-fit simulation.
+            </p>
+            <button 
+              onClick={() => setStep('analysis')}
+              className="w-full flex items-center justify-center gap-2 border border-[#1A2B48] py-3 text-[11px] font-bold tracking-widest uppercase hover:bg-[#1A2B48] hover:text-white transition-all"
+            >
+              <Upload size={14} /> Upload Foot Scan
+            </button>
+          </div>
+        </div>
+      </Layout>
+    );
+  }
+
+  if (step === 'analysis') {
+    return (
+      <Layout>
+        <div className="flex flex-col items-center justify-center pt-32 px-12 text-center">
+          <div className="w-20 h-20 border-4 border-gray-100 border-t-[#1A2B48] rounded-full animate-spin mb-8"></div>
+          <div className="font-mono text-[10px] text-gray-400 mb-2 uppercase tracking-[0.3em]">Status: Under Clinical Review</div>
+          <h2 className="text-xl font-bold mb-4">Mapping Anatomical Pressure Points...</h2>
+          <div className="w-full bg-gray-100 h-1 rounded-full overflow-hidden">
+            <div className="bg-[#1A2B48] h-full transition-all duration-300" style={{ width: `${progress}%` }}></div>
+          </div>
+          <p className="mt-8 text-xs text-gray-400 leading-relaxed italic">
+            "Our specialists are manually verifying your Match DNA. MVP SLA: Under 2 Hours."
+          </p>
+        </div>
+      </Layout>
+    );
+  }
+
+  if (step === 'result') {
+    return (
+      <Layout>
+        <div className="px-6 py-8">
+          <div className="inline-block px-2 py-1 bg-[#D32F2F] text-white text-[10px] font-bold mb-4">VERDICT: HIGH RISK</div>
+          <h2 className="text-2xl font-bold mb-6">Anatomical Heatmap Result</h2>
+          
+          <div className="relative aspect-[3/4] bg-gray-100 mb-8 border border-gray-200 overflow-hidden">
+            {/* Simulated Foot Image */}
+            <div className="absolute inset-0 flex items-center justify-center">
+               <div className="w-48 h-80 bg-gray-300 rounded-[100px] opacity-50 blur-xl"></div>
+            </div>
+            {/* Heatmap Overlay (F2) */}
+            <div className="absolute inset-0 flex flex-col items-center justify-center">
+                <div className="w-32 h-32 bg-[#D32F2F]/60 rounded-full blur-2xl animate-pulse"></div>
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-full -translate-y-full w-12 h-12 bg-orange-400/50 rounded-full blur-xl"></div>
+                <div className="absolute top-[60%] left-1/2 w-16 h-16 bg-[#D32F2F]/40 rounded-full blur-2xl"></div>
+            </div>
+            {/* Labels */}
+            <div className="absolute top-1/4 right-4 bg-white border border-[#D32F2F] p-2 text-[9px] font-bold text-[#D32F2F]">
+              CRITICAL PRESSURE POINT: 5th METATARSAL
+            </div>
+          </div>
+
+          <div className="space-y-4 mb-8">
+            <div className="p-4 bg-[#F8FAFC] border-l-4 border-[#1A2B48]">
+               <h4 className="text-xs font-bold uppercase mb-1 tracking-tight">Clinical Analysis</h4>
+               <p className="text-xs text-gray-600 leading-relaxed">
+                 Based on your wide forefoot profile, this shoe's rigid upper will cause **9/10 discomfort** and potential nerve compression.
+               </p>
+            </div>
+          </div>
+
+          <button 
+            onClick={() => setStep('redirect')}
+            className="w-full bg-[#1A2B48] text-white py-4 font-bold tracking-widest text-sm"
+          >
+            BUY ON AMAZON (EXTERNAL)
+          </button>
+        </div>
+      </Layout>
+    );
+  }
+
+  if (step === 'redirect') {
+    return (
+      <div className="min-h-screen bg-[#D32F2F] text-white flex items-center justify-center p-8 text-center">
+        <div className="max-w-xs">
+          <AlertCircle size={48} className="mx-auto mb-6" />
+          <h2 className="text-2xl font-bold mb-4 uppercase tracking-tighter">Safety Interstitial</h2>
+          <p className="text-sm leading-relaxed mb-8 opacity-90 font-medium">
+            WOMBET2 ANALYSIS INDICATES A <span className="underline underline-offset-4 font-black text-black">HIGH RISK</span> OF INJURY WITH THIS MODEL. 
+          </p>
+          <div className="space-y-4">
+            <button 
+              onClick={() => setStep('plp')}
+              className="w-full bg-white text-[#D32F2F] py-4 font-bold text-sm tracking-widest"
+            >
+              FIND SAFER ALTERNATIVES
+            </button>
+            <button 
+              onClick={() => alert("Redirecting to Amazon... (Affiliate Link Applied)")}
+              className="w-full border border-white py-3 text-[10px] font-bold tracking-[0.2em] opacity-70"
+            >
+              I ACCEPT THE RISK, PROCEED
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+};
+
+export default WOMBET2_Prototype;
